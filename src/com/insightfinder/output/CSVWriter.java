@@ -1,7 +1,6 @@
 package com.insightfinder.output;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentSkipListSet;
@@ -16,7 +15,7 @@ public class CSVWriter {
 			String metrics[] = {"CPUUtilization" ,"MemoryUsage" , "DiskReadBytes", "DiskWriteBytes", "NetworkIn", "NetworkOut"};
 			StringBuilder firstLine = new StringBuilder();
 			firstLine.append("Timestamp");
-			for(String metric : metrics) {
+			for (String metric : metrics) {
 				firstLine.append(',');
 				firstLine.append(metric);
 			}
@@ -25,21 +24,19 @@ public class CSVWriter {
 			sb.append(firstLine);
 			for (CombinedMetricDataPoint combinedDataPoint : skipList) {
 				sb.append(combinedDataPoint.getTimestamp());
-				for(String metric : metrics) {
+				for (String metric : metrics) {
 					String metricAverage = "";
-					if(combinedDataPoint.metricMap.containsKey(metric)) {
+					if (combinedDataPoint.metricMap.containsKey(metric)) {
 						metricAverage = combinedDataPoint.metricMap.get(metric).getAverage();
 					}
 					sb.append(',');
 					sb.append(metricAverage);
 				}
 				sb.append('\n');
-				
 			}
 			System.out.println(sb);
 	        writer.write(sb.toString());
 	        writer.close();
 	        System.out.println("done!");		
 	}
-
 }

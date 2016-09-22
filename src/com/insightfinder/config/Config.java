@@ -14,5 +14,6 @@ public class Config {
 	public static final String OUTPUT_CSV_FILE_LOCATION = "/home/saurabh/workspace_2/InsightFinder/resources/"; 
 	public static final String OUTPUT_XML_FILE_LOCATION = "/home/saurabh/workspace_2/InsightFinder/resources/"; 
 	public static final String OUTPUT_JSON_FILE_LOCATION = "/home/saurabh/workspace_2/InsightFinder/resources/";
+	public static final Long TIMESTAMP_DT = 300000L;
 
 }

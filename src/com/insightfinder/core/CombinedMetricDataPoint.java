@@ -6,6 +6,9 @@ import java.util.HashMap;
 public class CombinedMetricDataPoint implements Comparable<CombinedMetricDataPoint>  {
 	
 	private long timestamp;
+
+	public HashMap<String, SingleMetricDataPoint> metricMap = new HashMap<String, SingleMetricDataPoint>(); 
+
 	public long getTimestamp() {
 		return timestamp;
 	}
@@ -13,15 +16,13 @@ public class CombinedMetricDataPoint implements Comparable<CombinedMetricDataPoi
 	public void setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
 	}
-
-	public HashMap<String, SingleMetricDataPoint> metricMap = new HashMap<String, SingleMetricDataPoint>(); 
-
+	
 	@Override
-	public int compareTo(CombinedMetricDataPoint o) {
-		if(this.timestamp > o.timestamp) {
+	public int compareTo(CombinedMetricDataPoint obj) {
+		if (this.timestamp > obj.timestamp) {
 			return 1;
 		}
-		else if (this.timestamp < o.timestamp) {
+		else if (this.timestamp < obj.timestamp) {
 			return -1;
 		}
 		return 0;
@@ -37,7 +38,7 @@ public class CombinedMetricDataPoint implements Comparable<CombinedMetricDataPoi
 		StringBuilder objString = new StringBuilder("");
 		objString.append(" { Timestamp : ");
 		objString.append(this.getTimestamp());
-		for(String metricName : this.metricMap.keySet()) {
+		for (String metricName : this.metricMap.keySet()) {
 			objString.append("  ");
 			objString.append(metricName);
 			objString.append(" : ");

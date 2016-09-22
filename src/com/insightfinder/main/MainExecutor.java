@@ -1,5 +1,7 @@
 package com.insightfinder.main;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.concurrent.ConcurrentSkipListSet;
 
@@ -21,44 +23,61 @@ public class MainExecutor {
 
 	public static void main(String args[])throws Exception {
 		
+		ConcurrentSkipListSet<CombinedMetricDataPoint> skipList = readInput();
+		
+		generateOutput(skipList);
+	}
+
+
+	private static ConcurrentSkipListSet<CombinedMetricDataPoint> readInput() throws IOException, MalformedURLException {
+		
+		ConcurrentSkipListSet<CombinedMetricDataPoint> skipList = new ConcurrentSkipListSet<CombinedMetricDataPoint>();
 		String jsonString =  JSONFetcher.readJSONFromURL(METRICS_URL);
 		GenericJSONParser<Metric> metricsJsonParser = new GenericJSONParser<Metric>();
 		List <Metric> objectList = metricsJsonParser.parse(jsonString, "\n", Metric.class);
-		ConcurrentSkipListSet<CombinedMetricDataPoint> skipList = new ConcurrentSkipListSet<CombinedMetricDataPoint>();
-		for(Metric obj : objectList) {
-			System.out.println(obj);
-			String metricName = obj.getMetricName();
-			jsonString =  JSONFetcher.readJSONFromURL(URL_PART1 +metricName + URL_PART2);
+		
+		for (Metric metric : objectList) {
+			String metricName = metric.getMetricName();
+			jsonString =  JSONFetcher.readJSONFromURL(URL_PART1 + metricName + URL_PART2);
+			
 			GenericJSONParser<SingleMetricDataPoint> individualMetricJSONParser = new GenericJSONParser<SingleMetricDataPoint> ();
 			List<SingleMetricDataPoint> list = individualMetricJSONParser.parse(jsonString, ",", SingleMetricDataPoint.class);
+			
 			int counter = 0;
-			long minTimeStamp = list.get(0).getTime();
-			while(counter < list.size()) {
-				CombinedMetricDataPoint e = new CombinedMetricDataPoint();
-				e.setTimestamp(minTimeStamp);
-				if( minTimeStamp == list.get(counter).getTime()) {
-					SingleMetricDataPoint obj_rep = list.get(counter);
-					if(!skipList.add(e)) {
-						CombinedMetricDataPoint object = skipList.ceiling(e);
-						if(object .equals(e)) {
-							object.metricMap.put(metricName, obj_rep);
+			long currentTimeStamp = list.get(0).getTime();
+			
+			while (counter < list.size()) {
+				CombinedMetricDataPoint combinedDataPoint = new CombinedMetricDataPoint();
+				combinedDataPoint.setTimestamp(currentTimeStamp);
+				
+				if (currentTimeStamp == list.get(counter).getTime()) {
+					SingleMetricDataPoint metricDataPoint = list.get(counter);
+					
+					if (!skipList.add(combinedDataPoint)) {
+						CombinedMetricDataPoint storedDataPoint = skipList.ceiling(combinedDataPoint);
+						
+						if (storedDataPoint.equals(combinedDataPoint)) {
+							storedDataPoint.metricMap.put(metricName, metricDataPoint);
 						}
 					}
 					else {
-						e.metricMap.put(metricName, obj_rep);
+						combinedDataPoint.metricMap.put(metricName, metricDataPoint);
 					}
 					counter++;
 				}
-				minTimeStamp += 300000; 
+				currentTimeStamp += Config.TIMESTAMP_DT; 
 			}
 		}
+		return skipList;
+	}
+
+
+	private static void generateOutput(ConcurrentSkipListSet<CombinedMetricDataPoint> skipList) throws Exception {
 		
 		String outputOption = System.getProperty("insightfinder.metricsjson.output", Config.DEFAULT_OUTPUT_OPTION);
-		
 		if(outputOption.equals("csv")) {
 			CSVWriter csvWriter = new CSVWriter();
-			csvWriter.writeListToCSV(skipList);
-			
+			csvWriter.writeListToCSV(skipList);	
 		}
 		else if (outputOption.equals("xml")) {
 			XMLWriter xmlWriter = new XMLWriter();
@@ -72,5 +91,4 @@ public class MainExecutor {
 			throw new Exception("Unsupported Output Format"); 
 		}
 	}
-
 }

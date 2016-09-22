@@ -8,6 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SingleMetricDataPoint implements JSONObject {
+	
 	private String timestamp;
 	private Long time;
 	private String average;
@@ -76,7 +77,7 @@ public class SingleMetricDataPoint implements JSONObject {
 		Pattern r = Pattern.compile(pattern);
 		Matcher m = r.matcher(input);
 		String value = "";
-		if(m.find()) {
+		if (m.find()) {
 			value = m.group(0);
 		}
 		return value;
@@ -89,21 +90,21 @@ public class SingleMetricDataPoint implements JSONObject {
 		String average = "";
 		String unit = "";
 		int k = 0;
-		for(int i = 0;i < input_arr.length; i++ ) {
-			if(input_arr[i].indexOf("Timestamp") != -1) {
+		for (int i = 0; i < input_arr.length; i++ ) {
+			if (input_arr[i].indexOf("Timestamp") != -1) {
 				timestamp = input_arr[i].substring(input_arr[i].indexOf("Timestamp"));
 				timestamp = getTimestampValue(timestamp);
 			}
-			else if(input_arr[i].indexOf("Average") != -1) {
+			else if (input_arr[i].indexOf("Average") != -1) {
 				average = input_arr[i].substring(input_arr[i].indexOf("Average"));
 				average = getValue(average);
 			}
-			else if(input_arr[i].indexOf("Unit") != -1) {
+			else if (input_arr[i].indexOf("Unit") != -1) {
 				unit = input_arr[i].substring(input_arr[i].indexOf("Unit"));
 				unit = getValue(unit);
 			}
 			k++;
-			if(k % 3 == 0) {
+			if (k % 3 == 0) {
 				SingleMetricDataPoint triplet = new SingleMetricDataPoint();
 				triplet.setAverage(average);
 				triplet.setTimestamp(timestamp);
