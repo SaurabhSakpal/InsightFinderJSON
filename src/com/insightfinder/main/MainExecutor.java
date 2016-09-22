@@ -9,6 +9,7 @@ import com.insightfinder.core.Metric;
 import com.insightfinder.core.SingleMetricDataPoint;
 import com.insightfinder.json.fetcher.JSONFetcher;
 import com.insightfinder.json.parser.GenericJSONParser;
+import com.insightfinder.output.CSVWriter;
 import com.insightfinder.output.JSONWriter;
 import com.insightfinder.output.XMLWriter;
 
