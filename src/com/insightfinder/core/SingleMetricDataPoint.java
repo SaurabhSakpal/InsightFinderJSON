@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class DataPoint implements JSONObject {
+public class SingleMetricDataPoint implements JSONObject {
 	private String timestamp;
 	private Long time;
 	private String average;
@@ -83,8 +83,8 @@ public class DataPoint implements JSONObject {
 	}
 	
 	@Override
-	public List<DataPoint> JSONToList(String[] input_arr) {
-		List<DataPoint> list = new LinkedList<DataPoint>();
+	public List<SingleMetricDataPoint> JSONToList(String[] input_arr) {
+		List<SingleMetricDataPoint> list = new LinkedList<SingleMetricDataPoint>();
 		String timestamp = "";
 		String average = "";
 		String unit = "";
@@ -104,7 +104,7 @@ public class DataPoint implements JSONObject {
 			}
 			k++;
 			if(k % 3 == 0) {
-				DataPoint triplet = new DataPoint();
+				SingleMetricDataPoint triplet = new SingleMetricDataPoint();
 				triplet.setAverage(average);
 				triplet.setTimestamp(timestamp);
 				

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.insightfinder.core.DataPoint;
+import com.insightfinder.core.SingleMetricDataPoint;
 import com.insightfinder.core.JSONObject;
 
 
