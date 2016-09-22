@@ -89,7 +89,7 @@ public class SingleMetricDataPoint implements JSONObject {
 		String timestamp = "";
 		String average = "";
 		String unit = "";
-		int k = 0;
+		int counter = 0;
 		for (int i = 0; i < input_arr.length; i++ ) {
 			if (input_arr[i].indexOf("Timestamp") != -1) {
 				timestamp = input_arr[i].substring(input_arr[i].indexOf("Timestamp"));
@@ -103,26 +103,28 @@ public class SingleMetricDataPoint implements JSONObject {
 				unit = input_arr[i].substring(input_arr[i].indexOf("Unit"));
 				unit = getValue(unit);
 			}
-			k++;
-			if (k % 3 == 0) {
-				SingleMetricDataPoint triplet = new SingleMetricDataPoint();
-				triplet.setAverage(average);
-				triplet.setTimestamp(timestamp);
+			counter++;
+			if (counter % 3 == 0) {
+				SingleMetricDataPoint dataPoint = new SingleMetricDataPoint();
+				dataPoint.setAverage(average);
+				dataPoint.setTimestamp(timestamp);
 				
 		        try {
 		        	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 			        String dateInString = timestamp.replaceAll("Z$", "+0000");
 			        Date date = formatter.parse(dateInString);
-			        triplet.setTime(date.getTime());
+			        dataPoint.setTime(date.getTime());
 		        }
 		        catch (Exception e) {
 		        	System.out.println("Cannot Parse Date Properly " + e);
 		        }
-				triplet.setUnit(unit);
+				dataPoint.setUnit(unit);
+				
 				timestamp = "";
 				unit = "";
 				average = "";
-				list.add(triplet);
+				
+				list.add(dataPoint);
 			}		
 		}
 		return list;
