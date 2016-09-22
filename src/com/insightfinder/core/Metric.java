@@ -3,7 +3,29 @@ package com.insightfinder.core;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Metric is part of core class. 
+ *
+ * The JSON read from "http://thho.net/files/insightfinder/techtest/metrics.json" has following format.
+ * Metric has three member variables @namespace, @dimension and @metricName
+
+	 {
+	      "Namespace": "AWS/EC2",
+	      "Dimensions": [
+	        {
+	          "Name":"InstanceId",
+	          "Value":"i-dd8855ba"
+	        }
+	      ],
+	      "MetricName": "CPUUtilization"
+	 }
+	 
+ * 
+ * @author saurabh
+ *
+ */
 public class Metric implements JSONObject{
+	
 	private String namespace;
 	private Dimension dimensions;
 	private String metricName;

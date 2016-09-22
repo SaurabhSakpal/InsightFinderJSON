@@ -2,6 +2,13 @@ package com.insightfinder.core;
 
 import java.util.HashMap;
 
+/**
+ * CombinedMetricDataPoint is used to store the average values for each possible metric at given @timestamp
+ * @metricMap is used to store the mapping of MetricName to its average value at that @timestamp
+ * 
+ * @author saurabh
+ * 
+ */
 
 public class CombinedMetricDataPoint implements Comparable<CombinedMetricDataPoint>  {
 	
